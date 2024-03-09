@@ -1,20 +1,21 @@
 ﻿var WebNativeDialog = {
   NativeDialogPrompt:function (title , defaultValue){
-    defaultValue = Pointer_stringify(defaultValue);
-    title = Pointer_stringify(title);
+    defaultValue = UTF8ToString(defaultValue);
+    title = UTF8ToString(title);
     var result = window.prompt( title , defaultValue );
     if( !result ){
       result = defaultValue;
     }
-    var buffer = _malloc(lengthBytesUTF8(result) + 1);
-    writeStringToMemory(result, buffer);
+    var bufferSize = lengthBytesUTF8(result) + 1;
+    var buffer = _malloc(bufferSize);
+    stringToUTF8(result, buffer, bufferSize);
     return buffer;
   },
   SetupOverlayDialogHtml:function(title,defaultValue,okBtnText,cancelBtnText){
-    title = Pointer_stringify(title);
-    defaultValue = Pointer_stringify(defaultValue);
-    okBtnText = Pointer_stringify(okBtnText);
-    cancelBtnText = Pointer_stringify(cancelBtnText);
+    title = UTF8ToString(title);
+    defaultValue = UTF8ToString(defaultValue);
+    okBtnText = UTF8ToString(okBtnText);
+    cancelBtnText = UTF8ToString(cancelBtnText);
 
     if( !document.getElementById("nativeInputDialogInput" ) ){
       // setup css
@@ -69,7 +70,7 @@
     document.getElementById("nativeInputDialog" ).style.display = "";
   },
   HideUnityScreenIfHtmlOverlayCant:function(){
-    if( navigator.userAgent.indexOf("Chrome/") < 0 ){
+    if( navigator.userAgent.indexOf("Chrome") < 0 && navigator.userAgent.indexOf("Firefox") < 0 ){
       document.getElementById("canvas").style.display="none";
     }
   },
@@ -97,8 +98,9 @@
     if( inputField && inputField.value ){
       result = inputField.value;
     }
-    var buffer = _malloc(lengthBytesUTF8(result) + 1);
-    writeStringToMemory(result, buffer);
+    var bufferSize = lengthBytesUTF8(result) + 1;
+    var buffer = _malloc(bufferSize);
+    stringToUTF8(result, buffer, bufferSize);
     return buffer;
   }
 
